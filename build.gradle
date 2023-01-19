@@ -20,3 +20,30 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+task copyJarToDockerDir(type: Copy) {
+    from "$buildDir/libs"
+    include "**/*.jar"
+    into "$buildDir/docker"
+}
+
+task prepareDockerDir(type: Copy) {
+    from "$projectDir/docker"
+    include "**/*"
+    filter { it.replaceAll('<%=name%>', project.name) } // makes Dockerfile more generic
+    into "$buildDir/docker"
+}
+
+task buildDockerImage(type:Exec) {
+    workingDir "$buildDir"
+    commandLine "docker", "build", "-t", "ktrom/att", "docker"
+}
+
+task pushDockerImage(type: Exec) {
+    commandLine "docker", "push", "ktrom/att"
+}
+
+copyJarToDockerDir.dependsOn build
+buildDockerImage.dependsOn prepareDockerDir
+buildDockerImage.dependsOn copyJarToDockerDir
+pushDockerImage.dependsOn buildDockerImage
