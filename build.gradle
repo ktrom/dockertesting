@@ -12,6 +12,11 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 jar {
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
     archiveBaseName = 'dockerfun'
     archiveVersion =  '0.1.0'
 }
@@ -29,29 +34,29 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task copyJarToDockerDir(type: Copy) {
-    from "$buildDir/libs"
-    include "**/*.jar"
-    into "$buildDir/docker"
-}
+//task copyJarToDockerDir(type: Copy) {
+//    from "$buildDir/libs"
+//    include "**/*.jar"
+//    into "$buildDir/docker"
+//}
+//
+//task prepareDockerDir(type: Copy) {
+//    from "$projectDir/docker"
+//    include "**/*"
+//    filter { it.replaceAll('<%=name%>', project.name) } // makes Dockerfile more generic
+//    into "$buildDir/docker"
+//}
+//
+//task buildDockerImage(type:Exec) {
+//    workingDir "$buildDir"
+//    commandLine "docker", "build", "-t", "ktrom/att", "docker"
+//}
+//
+//task pushDockerImage(type: Exec) {
+//    commandLine "docker", "push", "ktrom/att"
+//}
 
-task prepareDockerDir(type: Copy) {
-    from "$projectDir/docker"
-    include "**/*"
-    filter { it.replaceAll('<%=name%>', project.name) } // makes Dockerfile more generic
-    into "$buildDir/docker"
-}
-
-task buildDockerImage(type:Exec) {
-    workingDir "$buildDir"
-    commandLine "docker", "build", "-t", "ktrom/att", "docker"
-}
-
-task pushDockerImage(type: Exec) {
-    commandLine "docker", "push", "ktrom/att"
-}
-
-copyJarToDockerDir.dependsOn build
-buildDockerImage.dependsOn prepareDockerDir
-buildDockerImage.dependsOn copyJarToDockerDir
-pushDockerImage.dependsOn buildDockerImage
+//copyJarToDockerDir.dependsOn build
+//buildDockerImage.dependsOn prepareDockerDir
+//buildDockerImage.dependsOn copyJarToDockerDir
+//pushDockerImage.dependsOn buildDockerImage

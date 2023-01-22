@@ -1,2 +1,2 @@
 import subprocess
-subprocess.run(["docker", "build", "--build-arg", "JAR_FILE=build/libs/*.jar", "-t", "dockerfun-dockerimage-1", "."])
+subprocess.run(["docker", "build", "--build-arg", "JAR_FILE=build/libs/DockerFun-0.0.1-SNAPSHOT.jar", "-t", "dockerfun-dockerimage-1", "."])
